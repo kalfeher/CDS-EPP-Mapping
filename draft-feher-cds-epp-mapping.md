@@ -47,7 +47,10 @@ when, and only when, they appear in all capitals, as shown here.
 
 # Background
 
-Talk about 8078 and 7344.
+RFC 7344 specifies how DNS trust can be maintained across key rollovers in-band between parent and child. RFC 8078 added inband signalling DNSSEC status changes and documented 3 use cases. This document describes how the parent zone changes required by those use cases might be implemented via EPP.
+## Registries and Registrars
+Support for CDS amongst TLDs is likely to remain inconsistent for some time. Therefore it is likely that the party which observes a domain's CDS records and subsequent state changes could be either the Registry or the sponsoring Registrar. In most TLDs both the Registrar and Registry are capable of making the changes signaled by CDS records, to the parent zone.
+
 Some Registrars may support CDS even if the Registry does not.
 Some Registries may use EPP as the method by which CDS signals are applied to the registry service.
 This document seeks to map the three use cases found in RFC 8078 section 2, to EPP operations.
