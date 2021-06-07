@@ -21,7 +21,7 @@
       </address>
     </author>
 
-    <date year="2021" month="March" day="18"/>
+    <date year="2021" month="June" day="07"/>
 
     <area>General</area>
     <workgroup>TODO Working Group</workgroup>
@@ -54,6 +54,53 @@
 document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/>
 when, and only when, they appear in all capitals, as shown here.</t>
 
+</section>
+<section anchor="background" title="Background">
+
+<t>RFC 7344 specifies how DNS trust can be maintained across key rollovers in-band between parent and child. RFC 8078 added inband signalling DNSSEC status changes and documented 3 use cases. This document describes how the parent zone changes required by those use cases might be implemented via EPP. This document seeks to map the three use cases found in RFC 8078 section 2, to EPP operations.</t>
+
+<section anchor="registries-and-registrars" title="Registries and Registrars">
+<t>Support for CDS/CDNSKEY amongst Internet Registries is likely to remain inconsistent for some time. Therefore practices for updating the parent zone for a registered domain should allow for either the Registry or the sponsoring Registrar to observe a domain's CDS records and subsequent state changes. In most TLDs both the Registrar and Registry are capable of making the changes signaled by CDS records, to the parent zone.</t>
+
+<t>Some Registrars may support CDS even if the Registry does not.</t>
+
+<t>Some Registries may use EPP as the method by which CDS signals are applied to the registry system for subsequent entry into the registered domain's parent zone.</t>
+
+</section>
+</section>
+<section anchor="use-cases" title="Use Cases">
+
+<section anchor="enable-dnssec-validation" title="Enable DNSSEC Validation">
+
+<section anchor="accept-policy-via-authenticated-channel" title="Accept Policy via Authenticated Channel">
+<t>TODO</t>
+
+</section>
+<section anchor="accept-with-extra-checks" title="Accept with Extra Checks">
+<t>TODO</t>
+
+</section>
+<section anchor="accept-after-delay" title="Accept after Delay">
+<t>TODO</t>
+
+</section>
+<section anchor="accept-with-challenge" title="Accept with Challenge">
+<t>TODO</t>
+
+</section>
+<section anchor="accept-from-inception" title="Accept from Inception">
+<t>TODO</t>
+
+</section>
+</section>
+<section anchor="roll-over-the-ksk" title="Roll over the KSK">
+<t>TODO</t>
+
+</section>
+<section anchor="turn-off-dnssec-validation" title="Turn off DNSSEC validation">
+<t>TODO</t>
+
+</section>
 </section>
 <section anchor="security-considerations" title="Security Considerations">
 
@@ -120,20 +167,34 @@ when, and only when, they appear in all capitals, as shown here.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIAKcJU2AAA2VS227bMAx911dw3msdNEWBrQYGzEvSNmgSZ02CYRiGgrbp
-WIgteZKcICvy76Ocy256ES+H4uERwzAUTrqKIggGwwU4DaP5HKbYNFKtA4Fp
-amjLySy3nLjEc50prLkqN1i4sKCSTMiYkJomrI+osEJH1omMr7U2+wikKrQQ
-sjERONNad3N9fXd9I9AQRvBAigxWYqfNZm1020SwTIYJfGGfX4MHHxMb2jMg
-j2CsHBlFLhx6BkJYhyp/wUorZrUnK2yNxr38aDWTiEBp0cgIvjmdXYHVxhkq
-LFv72hvfhcDWldpEAkIBfKTioqce3PvJushx3ies/ohps0Ylf6KTWkUw495d
-mGqUFY9LrvjYSVNgLat9j+FCKG1qLtgS94Ln+8FNv38XsSqszSXBJwxDwNQ6
-gxlP1ykRX1yfrGWeVyTEWy+F0XmbeRYn6N8hxgy02pLyrgUWCoZUSCU7n0tK
-AhYWvLIWgulqsQyujjfMks5+Hn1ejZ9HQ28vHuPJ5GKcEYvHZDXhvDhZvysH
-yXQ6mg2PxRyFf0LT+CtfnlWQzJfjZBZPAv4AcKW0ftPampkDb4lfz5Q4xV/f
-GHKUA1rIyWZGpuxwzafBHPq38Pp6UvZwYPsNO+/7724PB7ErSR17aVXxxJ3r
-Sh6el5bQ+DewqiDDRjqseEW4gy31TgH/I/U6MReUtUa6vVfVypzX9iyk1/6c
-7aDjeBb/D+PB4DJYyR2UPiKx+zHbO29AitnGPxNnG6V3FeVrX2LFa6TaOmVC
-+YegYJoUHE7d8YJksr8A9aUl5N8DAAA=
+H4sIAHEEvmAAA3VVbW/bNhD+rl9xcz/sS5UlaYC0BgbMtd02yIuzONlQDENB
+SyeLsESqJGVXLfLf9xxlO06KBQhM8t6fe+6UpmkSdKh4SIPxZE7B0vT2lq5V
+02izHCRqsXC8hjDLPQT799xmRtWwyp0qQlpwyS6FTspNk9a9VlqpwD4kGX6W
+1nVD0qawSaIbN6TgWh9Oj4/fHZ8myrEa0kc27FSVbKxbLZ1tmyHdzyYz+ht3
+eKOP8pasuINCPqQLE9gZDulEMkgSH5TJv6jKGmTVsU98rVz48rW1SGJIxiaN
+HtI/wWavyVsXHBcep66Ww79JotpQWjdMKE0If9rA6PKIPkhl8aWv91JVB2/W
+LZXR31XQ1gzpBrHjM9dKVyiXQ/FHhKZQta66I6gnibGuhsGaEYvuPoxPT07e
+DYEKsNkL8JemKamFD05lqC4iMdpfRVjrPK84SV4JFM7mbSZZbFWfP0FnbM2a
+jVw9ASiacKGNjneYlEwAlgRZT4Prh/n94HX/SzezeL6b/vlwcTedyHn+aXR1
+tT/sNOafZg9XkCfb05PleHZ9Pb2Z9MZ4pRdP16PP+JGsBrPb+4vZzehqgAZQ
+KLUXprU1MiewROi5YIjQ+sZx4JyUp5x95vQCF9i8H9/SyRn9+LFF9vER519w
+eXtyfvb4mGxKNn0saypUHK+hRPEgLSsnPlRVUaYaHVQFiiCCL+3GEPrIR4Ll
+e5VFhpo8SeCZzt+cnZFvONOFZk9QpsnNvKc4HBnJGYwwAf+Scuas9xFwZ6vK
+rtl5hE0XktWCw4bZUINypWg8ZaWu8iOhCr09Pn9LKs9jrVHf66VBvjIgiDmf
+jgmDEFoPK2WW3Dd7hyHM3lDrGUl59kd0D4D3wj2OfQXAZJfEd/B678/x11Y7
+eFp00LFwtncISi7LEDtUNxVvI661kp3yMppnXnlpKLZFDBZKx4fOCgFY2rEv
+3HPkM52+3u0p22BlRBJLY17RHS81ZkRv695elfPJvG0aTD28OsKi+20MtC6n
+n0nV1izRpt06OXSBdCu9YtAE4ZwMtUE+GaJBQ2oQZ97WyF3XLAWCIXgDcDKm
+OotVOGqbHEmiQy8xFaGCZ4nIgmluYxDwra1y4SEaIUqsYeqi/Ta/Drsn3n2D
+fKwT9/tyJV+78OzWDP+901+91I1gWRzyyJ0WOl/b2A2QZt/jI6BBtQUq91cT
+TwsbysPQ8H8AbhcHE+OiFhWTLdDP1a7WHWd6kvacOUgitvEFJujjXBB9ah0c
+dki1b59YMxYZ6eI5GrlFHGPDC3tpo9gLrYQwGGYxqxnUjelsSp2V0W2fpI/l
+YBdUGvlu83O7KL5Do+q+70/g4R8yzPeh9kE/Af3zCrFDHpDQWHgeeTs1Eb3t
+BP+lKp2rfnW/gnSUZdwEurWVzro4TyN8rGSby6c1pzFgNlzFzf/MYgPa0PQb
+YIQOZyv/swq+nSDWhCvV/Y89vFcVo48/ywtna3BFzpLsTk53WGskey3icTm/
+fBLdt86AJcWu1vVTrVsdmnPWOh06+WZ5ne8mfPtl20kjihejm9HPas/2TKmE
+F72myna7ov+ELrDIxc0oWxm7AUGXYuKTH0PT1gvp4O+DApzgweM2utproo//
+AfiPCZA9CQAA
 
 -->
 
