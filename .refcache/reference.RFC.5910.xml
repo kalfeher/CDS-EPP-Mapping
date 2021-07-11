@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference  anchor='RFC5910' target='https://www.rfc-editor.org/info/rfc5910'>
+<front>
+<title>Domain Name System (DNS) Security Extensions Mapping for the Extensible Provisioning Protocol (EPP)</title>
+<author initials='J.' surname='Gould' fullname='J. Gould'><organization /></author>
+<author initials='S.' surname='Hollenbeck' fullname='S. Hollenbeck'><organization /></author>
+<date year='2010' month='May' />
+<abstract><t>This document describes an Extensible Provisioning Protocol (EPP) extension mapping for the provisioning and management of Domain Name System security (DNSSEC) extensions for domain names stored in a shared central repository.  Specified in XML, this mapping extends the EPP domain name mapping to provide additional features required for the provisioning of DNS security extensions.  This document obsoletes RFC 4310.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='5910'/>
+<seriesInfo name='DOI' value='10.17487/RFC5910'/>
+</reference>

@@ -21,7 +21,7 @@
       </address>
     </author>
 
-    <date year="2021" month="June" day="07"/>
+    <date year="2021" month="July" day="11"/>
 
     <area>General</area>
     <workgroup>TODO Working Group</workgroup>
@@ -57,7 +57,7 @@ when, and only when, they appear in all capitals, as shown here.</t>
 </section>
 <section anchor="background" title="Background">
 
-<t>RFC 7344 specifies how DNS trust can be maintained across key rollovers in-band between parent and child. RFC 8078 added inband signalling DNSSEC status changes and documented 3 use cases. This document describes how the parent zone changes required by those use cases might be implemented via EPP. This document seeks to map the three use cases found in RFC 8078 section 2, to EPP operations.</t>
+<t><xref target="RFC7344"/> specifies how DNS trust can be maintained across key rollovers in-band between parent and child. <xref target="RFC8078"/> added inband signalling DNSSEC status changes and documented 3 use cases. This document describes how the parent zone changes required by those use cases might be implemented via EPP. This document seeks to map the three use cases found in <xref target="RFC8078"/> section 2, to EPP operations.</t>
 
 <section anchor="registries-and-registrars" title="Registries and Registrars">
 <t>Support for CDS/CDNSKEY amongst Internet Registries is likely to remain inconsistent for some time. Therefore practices for updating the parent zone for a registered domain should allow for either the Registry or the sponsoring Registrar to observe a domain's CDS records and subsequent state changes. In most TLDs both the Registrar and Registry are capable of making the changes signaled by CDS records, to the parent zone.</t>
@@ -68,12 +68,13 @@ when, and only when, they appear in all capitals, as shown here.</t>
 
 </section>
 </section>
-<section anchor="use-cases" title="Use Cases">
+<section anchor="registrar-initial-trust-models" title="Registrar Initial Trust Models">
+<t>RFC8078 proposes several models that a parent may use for managing initial trust. These models assume that it is the parent which will observe any CDS/CDNSKEY signals and it will also be the parent which manages the initial trust solution.</t>
 
-<section anchor="enable-dnssec-validation" title="Enable DNSSEC Validation">
+<t>When a Registry does not support <xref target="RFC8078"/> a Registrar can instead carry out the operations described in <xref target="RFC8078"/> section 3.</t>
 
 <section anchor="accept-policy-via-authenticated-channel" title="Accept Policy via Authenticated Channel">
-<t>TODO</t>
+<t>The Registrar can use an authenticated channel to receive a notice that a CDS/CDNSKEY exists. Once the notice is received, the process documented in <xref target="RFC8078"/> section 3.1 should be followed.</t>
 
 </section>
 <section anchor="accept-with-extra-checks" title="Accept with Extra Checks">
@@ -89,9 +90,18 @@ when, and only when, they appear in all capitals, as shown here.</t>
 
 </section>
 <section anchor="accept-from-inception" title="Accept from Inception">
-<t>TODO</t>
+<t>TODO
+# EPP Commands for CDS/CDNSKEY Use Cases</t>
 
 </section>
+<section anchor="enable-dnssec-validation" title="Enable DNSSEC Validation">
+<t>Regardless of the method used to determine that the initial CDS/CDNSKEY signal is trustworthy, the Registrar or Registry SHOULD use the EPP &lt;update&gt; command with the secDNS extension documented in <xref target="RFC5910"/> in order to add the DS to the parent. A &lt;secDNS:add&gt; sub-element to &lt;secDNS:update&gt; MUST be used to indicate that security information is being added.
+In the case of a CDS RRset the DS Data Interface MUST be used by including the &lt;secDNS:dsData&gt; child element to &lt;secDNS:update&gt;.
+In the case of a CDNSKEY RRset, the Key Data Interface MUST be used by including the &lt;secDNS:keyData&gt; child element to &lt;secDNS:update&gt;.
+If both CDS and CDNSKEY RRsets are present then a Registrar SHOULD choose the RRset based on the server policy.</t>
+
+<t>TODO EPP Examples</t>
+
 </section>
 <section anchor="roll-over-the-ksk" title="Roll over the KSK">
 <t>TODO</t>
@@ -152,6 +162,49 @@ when, and only when, they appear in all capitals, as shown here.</t>
 
 
 
+<reference anchor='RFC7344' target='https://www.rfc-editor.org/info/rfc7344'>
+<front>
+<title>Automating DNSSEC Delegation Trust Maintenance</title>
+<author fullname='W. Kumari' initials='W.' surname='Kumari'><organization/></author>
+<author fullname='O. Gudmundsson' initials='O.' surname='Gudmundsson'><organization/></author>
+<author fullname='G. Barwood' initials='G.' surname='Barwood'><organization/></author>
+<date month='September' year='2014'/>
+<abstract><t>This document describes a method to allow DNS Operators to more easily update DNSSEC Key Signing Keys using the DNS as a communication channel.  The technique described is aimed at delegations in which it is currently hard to move information from the Child to Parent.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='7344'/>
+<seriesInfo name='DOI' value='10.17487/RFC7344'/>
+</reference>
+
+
+
+<reference anchor='RFC8078' target='https://www.rfc-editor.org/info/rfc8078'>
+<front>
+<title>Managing DS Records from the Parent via CDS/CDNSKEY</title>
+<author fullname='O. Gudmundsson' initials='O.' surname='Gudmundsson'><organization/></author>
+<author fullname='P. Wouters' initials='P.' surname='Wouters'><organization/></author>
+<date month='March' year='2017'/>
+<abstract><t>RFC 7344 specifies how DNS trust can be maintained across key rollovers in-band between parent and child.  This document elevates RFC 7344 from Informational to Standards Track.  It also adds a method for initial trust setup and removal of a secure entry point.</t><t>Changing a domain's DNSSEC status can be a complicated matter involving multiple unrelated parties.  Some of these parties, such as the DNS operator, might not even be known by all the organizations involved.  The inability to disable DNSSEC via in-band signaling is seen as a problem or liability that prevents some DNSSEC adoption at a large scale.  This document adds a method for in-band signaling of these DNSSEC status changes.</t><t>This document describes reasonable policies to ease deployment of the initial acceptance of new secure entry points (DS records).</t><t>It is preferable that operators collaborate on the transfer or move of a domain.  The best method is to perform a Key Signing Key (KSK) plus Zone Signing Key (ZSK) rollover.  If that is not possible, the method using an unsigned intermediate state described in this document can be used to move the domain between two parties.  This leaves the domain temporarily unsigned and vulnerable to DNS spoofing, but that is preferred over the alternative of validation failures due to a mismatched DS and DNSKEY record.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='8078'/>
+<seriesInfo name='DOI' value='10.17487/RFC8078'/>
+</reference>
+
+
+
+<reference anchor='RFC5910' target='https://www.rfc-editor.org/info/rfc5910'>
+<front>
+<title>Domain Name System (DNS) Security Extensions Mapping for the Extensible Provisioning Protocol (EPP)</title>
+<author fullname='J. Gould' initials='J.' surname='Gould'><organization/></author>
+<author fullname='S. Hollenbeck' initials='S.' surname='Hollenbeck'><organization/></author>
+<date month='May' year='2010'/>
+<abstract><t>This document describes an Extensible Provisioning Protocol (EPP) extension mapping for the provisioning and management of Domain Name System security (DNSSEC) extensions for domain names stored in a shared central repository.  Specified in XML, this mapping extends the EPP domain name mapping to provide additional features required for the provisioning of DNS security extensions.  This document obsoletes RFC 4310.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='5910'/>
+<seriesInfo name='DOI' value='10.17487/RFC5910'/>
+</reference>
+
+
+
 
     </references>
 
@@ -167,34 +220,45 @@ when, and only when, they appear in all capitals, as shown here.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIAHEEvmAAA3VVbW/bNhD+rl9xcz/sS5UlaYC0BgbMtd02yIuzONlQDENB
-SyeLsESqJGVXLfLf9xxlO06KBQhM8t6fe+6UpmkSdKh4SIPxZE7B0vT2lq5V
-02izHCRqsXC8hjDLPQT799xmRtWwyp0qQlpwyS6FTspNk9a9VlqpwD4kGX6W
-1nVD0qawSaIbN6TgWh9Oj4/fHZ8myrEa0kc27FSVbKxbLZ1tmyHdzyYz+ht3
-eKOP8pasuINCPqQLE9gZDulEMkgSH5TJv6jKGmTVsU98rVz48rW1SGJIxiaN
-HtI/wWavyVsXHBcep66Ww79JotpQWjdMKE0If9rA6PKIPkhl8aWv91JVB2/W
-LZXR31XQ1gzpBrHjM9dKVyiXQ/FHhKZQta66I6gnibGuhsGaEYvuPoxPT07e
-DYEKsNkL8JemKamFD05lqC4iMdpfRVjrPK84SV4JFM7mbSZZbFWfP0FnbM2a
-jVw9ASiacKGNjneYlEwAlgRZT4Prh/n94HX/SzezeL6b/vlwcTedyHn+aXR1
-tT/sNOafZg9XkCfb05PleHZ9Pb2Z9MZ4pRdP16PP+JGsBrPb+4vZzehqgAZQ
-KLUXprU1MiewROi5YIjQ+sZx4JyUp5x95vQCF9i8H9/SyRn9+LFF9vER519w
-eXtyfvb4mGxKNn0saypUHK+hRPEgLSsnPlRVUaYaHVQFiiCCL+3GEPrIR4Ll
-e5VFhpo8SeCZzt+cnZFvONOFZk9QpsnNvKc4HBnJGYwwAf+Scuas9xFwZ6vK
-rtl5hE0XktWCw4bZUINypWg8ZaWu8iOhCr09Pn9LKs9jrVHf66VBvjIgiDmf
-jgmDEFoPK2WW3Dd7hyHM3lDrGUl59kd0D4D3wj2OfQXAZJfEd/B678/x11Y7
-eFp00LFwtncISi7LEDtUNxVvI661kp3yMppnXnlpKLZFDBZKx4fOCgFY2rEv
-3HPkM52+3u0p22BlRBJLY17RHS81ZkRv695elfPJvG0aTD28OsKi+20MtC6n
-n0nV1izRpt06OXSBdCu9YtAE4ZwMtUE+GaJBQ2oQZ97WyF3XLAWCIXgDcDKm
-OotVOGqbHEmiQy8xFaGCZ4nIgmluYxDwra1y4SEaIUqsYeqi/Ta/Drsn3n2D
-fKwT9/tyJV+78OzWDP+901+91I1gWRzyyJ0WOl/b2A2QZt/jI6BBtQUq91cT
-TwsbysPQ8H8AbhcHE+OiFhWTLdDP1a7WHWd6kvacOUgitvEFJujjXBB9ah0c
-dki1b59YMxYZ6eI5GrlFHGPDC3tpo9gLrYQwGGYxqxnUjelsSp2V0W2fpI/l
-YBdUGvlu83O7KL5Do+q+70/g4R8yzPeh9kE/Af3zCrFDHpDQWHgeeTs1Eb3t
-BP+lKp2rfnW/gnSUZdwEurWVzro4TyN8rGSby6c1pzFgNlzFzf/MYgPa0PQb
-YIQOZyv/swq+nSDWhCvV/Y89vFcVo48/ywtna3BFzpLsTk53WGskey3icTm/
-fBLdt86AJcWu1vVTrVsdmnPWOh06+WZ5ne8mfPtl20kjihejm9HPas/2TKmE
-F72myna7ov+ELrDIxc0oWxm7AUGXYuKTH0PT1gvp4O+DApzgweM2utproo//
-AfiPCZA9CQAA
+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
+HqGd+9a77CVxb/4NbNnbjbkOAAA=
 
 -->
 

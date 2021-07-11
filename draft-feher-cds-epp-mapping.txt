@@ -4,8 +4,8 @@
 
 TODO Working Group                                              K. Feher
 Internet-Draft                                                      None
-Intended status: Informational                             June 07, 2021
-Expires: December 9, 2021
+Intended status: Informational                             July 11, 2021
+Expires: January 12, 2022
 
 
                            CDS to EPP Mapping
@@ -30,7 +30,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 9, 2021.
+   This Internet-Draft will expire on January 12, 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Feher                   Expires December 9, 2021                [Page 1]
+Feher                   Expires January 12, 2022                [Page 1]
 
-Internet-Draft                cdsEPPMapping                    June 2021
+Internet-Draft                cdsEPPMapping                    July 2021
 
 
 Table of Contents
@@ -64,20 +64,20 @@ Table of Contents
    2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   2
    3.  Background  . . . . . . . . . . . . . . . . . . . . . . . . .   2
      3.1.  Registries and Registrars . . . . . . . . . . . . . . . .   2
-   4.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-     4.1.  Enable DNSSEC Validation  . . . . . . . . . . . . . . . .   3
-       4.1.1.  Accept Policy via Authenticated Channel . . . . . . .   3
-       4.1.2.  Accept with Extra Checks  . . . . . . . . . . . . . .   3
-       4.1.3.  Accept after Delay  . . . . . . . . . . . . . . . . .   3
-       4.1.4.  Accept with Challenge . . . . . . . . . . . . . . . .   3
-       4.1.5.  Accept from Inception . . . . . . . . . . . . . . . .   3
-     4.2.  Roll over the KSK . . . . . . . . . . . . . . . . . . . .   3
-     4.3.  Turn off DNSSEC validation  . . . . . . . . . . . . . . .   3
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   3
+   4.  Registrar Initial Trust Models  . . . . . . . . . . . . . . .   3
+     4.1.  Accept Policy via Authenticated Channel . . . . . . . . .   3
+     4.2.  Accept with Extra Checks  . . . . . . . . . . . . . . . .   3
+     4.3.  Accept after Delay  . . . . . . . . . . . . . . . . . . .   3
+     4.4.  Accept with Challenge . . . . . . . . . . . . . . . . . .   3
+     4.5.  Accept from Inception . . . . . . . . . . . . . . . . . .   3
+     4.6.  Enable DNSSEC Validation  . . . . . . . . . . . . . . . .   3
+     4.7.  Roll over the KSK . . . . . . . . . . . . . . . . . . . .   4
+     4.8.  Turn off DNSSEC validation  . . . . . . . . . . . . . . .   4
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
    7.  Normative References  . . . . . . . . . . . . . . . . . . . .   4
-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   4
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   5
 
 1.  Introduction
 
@@ -93,12 +93,12 @@ Table of Contents
 
 3.  Background
 
-   RFC 7344 specifies how DNS trust can be maintained across key
-   rollovers in-band between parent and child.  RFC 8078 added inband
+   [RFC7344] specifies how DNS trust can be maintained across key
+   rollovers in-band between parent and child.  [RFC8078] added inband
    signalling DNSSEC status changes and documented 3 use cases.  This
    document describes how the parent zone changes required by those use
    cases might be implemented via EPP.  This document seeks to map the
-   three use cases found in RFC 8078 section 2, to EPP operations.
+   three use cases found in [RFC8078] section 2, to EPP operations.
 
 3.1.  Registries and Registrars
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Feher                   Expires December 9, 2021                [Page 2]
+Feher                   Expires January 12, 2022                [Page 2]
 
-Internet-Draft                cdsEPPMapping                    June 2021
+Internet-Draft                cdsEPPMapping                    July 2021
 
 
    records and subsequent state changes.  In most TLDs both the
@@ -124,51 +124,74 @@ Internet-Draft                cdsEPPMapping                    June 2021
    applied to the registry system for subsequent entry into the
    registered domain's parent zone.
 
-4.  Use Cases
+4.  Registrar Initial Trust Models
 
-4.1.  Enable DNSSEC Validation
+   RFC8078 proposes several models that a parent may use for managing
+   initial trust.  These models assume that it is the parent which will
+   observe any CDS/CDNSKEY signals and it will also be the parent which
+   manages the initial trust solution.
 
-4.1.1.  Accept Policy via Authenticated Channel
+   When a Registry does not support [RFC8078] a Registrar can instead
+   carry out the operations described in [RFC8078] section 3.
 
-   TODO
+4.1.  Accept Policy via Authenticated Channel
 
-4.1.2.  Accept with Extra Checks
+   The Registrar can use an authenticated channel to receive a notice
+   that a CDS/CDNSKEY exists.  Once the notice is received, the process
+   documented in [RFC8078] section 3.1 should be followed.
 
-   TODO
-
-4.1.3.  Accept after Delay
-
-   TODO
-
-4.1.4.  Accept with Challenge
-
-   TODO
-
-4.1.5.  Accept from Inception
+4.2.  Accept with Extra Checks
 
    TODO
 
-4.2.  Roll over the KSK
+4.3.  Accept after Delay
 
    TODO
 
-4.3.  Turn off DNSSEC validation
+4.4.  Accept with Challenge
+
+   TODO
+
+4.5.  Accept from Inception
+
+   TODO # EPP Commands for CDS/CDNSKEY Use Cases
+
+4.6.  Enable DNSSEC Validation
+
+   Regardless of the method used to determine that the initial CDS/
+   CDNSKEY signal is trustworthy, the Registrar or Registry SHOULD use
+   the EPP <update> command with the secDNS extension documented in
+   [RFC5910] in order to add the DS to the parent.  A <secDNS:add> sub-
+
+
+
+Feher                   Expires January 12, 2022                [Page 3]
+
+Internet-Draft                cdsEPPMapping                    July 2021
+
+
+   element to <secDNS:update> MUST be used to indicate that security
+   information is being added.  In the case of a CDS RRset the DS Data
+   Interface MUST be used by including the <secDNS:dsData> child element
+   to <secDNS:update>.  In the case of a CDNSKEY RRset, the Key Data
+   Interface MUST be used by including the <secDNS:keyData> child
+   element to <secDNS:update>.  If both CDS and CDNSKEY RRsets are
+   present then a Registrar SHOULD choose the RRset based on the server
+   policy.
+
+   TODO EPP Examples
+
+4.7.  Roll over the KSK
+
+   TODO
+
+4.8.  Turn off DNSSEC validation
 
    TODO
 
 5.  Security Considerations
 
    TODO Security
-
-
-
-
-
-
-Feher                   Expires December 9, 2021                [Page 3]
-
-Internet-Draft                cdsEPPMapping                    June 2021
-
 
 6.  IANA Considerations
 
@@ -180,6 +203,33 @@ Internet-Draft                cdsEPPMapping                    June 2021
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC5910]  Gould, J. and S. Hollenbeck, "Domain Name System (DNS)
+              Security Extensions Mapping for the Extensible
+              Provisioning Protocol (EPP)", RFC 5910,
+              DOI 10.17487/RFC5910, May 2010,
+              <https://www.rfc-editor.org/info/rfc5910>.
+
+   [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
+              DNSSEC Delegation Trust Maintenance", RFC 7344,
+              DOI 10.17487/RFC7344, September 2014,
+              <https://www.rfc-editor.org/info/rfc7344>.
+
+
+
+
+
+
+
+Feher                   Expires January 12, 2022                [Page 4]
+
+Internet-Draft                cdsEPPMapping                    July 2021
+
+
+   [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
+              the Parent via CDS/CDNSKEY", RFC 8078,
+              DOI 10.17487/RFC8078, March 2017,
+              <https://www.rfc-editor.org/info/rfc8078>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -221,4 +271,10 @@ Author's Address
 
 
 
-Feher                   Expires December 9, 2021                [Page 4]
+
+
+
+
+
+
+Feher                   Expires January 12, 2022                [Page 5]
