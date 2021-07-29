@@ -82,9 +82,10 @@ TODO
 ### Accept from Inception
 TODO
 
-## Draft-thomassen-dnsop-dnssec-bootstrapping
+### Draft-thomassen-dnsop-dnssec-bootstrapping
 
-This draft supports the "bootstrap" method where a DNS operator, to whom the Registrant's domain is delegated, is able to publish the CDS/CDNSKEY records in the Registrant's domain (which will then become DNSSEC signed), and to also publish this initial CDS/CDNSKEY in a special zone operated bo the DNS operator, specifically for the purpose of establishing this initial trust.
+[//]: # (Depending on the progress of the bootstrap draft we might reduce this text to a short summary)
+This draft supports the "bootstrap" method where a DNS operator, to whom the Registrant's domain is delegated, is able to publish the CDS/CDNSKEY records in the Registrant's domain (which will then become DNSSEC signed), and to also publish this initial CDS/CDNSKEY in a special zone operated by the DNS operator, specifically for the purpose of establishing this initial trust.
 
 ### Bootstrap Details
 
@@ -103,8 +104,11 @@ Once the initial trust exists, all the rest of RFC7344 can manage key rollovers 
 ### Bootstrapping Multi-Signer DNSSEC
 
 The interesting consequence of bootstrap is that a second DNS provider can be added at the Registrar (and submitted as an insecure delegation via EPP), and then the new DNS provider's bootstrap can be recognized to add a second secure delegation, to enable multi-signer DNSSEC.
+[//]: # (I don't quite follow the comments regarding 'insecure delegation' and 'secure delegation' if a single DS is present its secure regardless of whether the second provider's DS is present yet or not.)
+
 
 Each DNS operator would have its own KSK, and would need to maintain the full set of ZSKs for both providers, in order for both providers' zone instances to pass the DNSSEC validation logic.
+[//]: # (The domain owner can still generate the dnskey rrset on behalf of each operator, so 2x KSK isnt strictly required. although perhaps you wouldnt bother with this bootstrap method if you had that capability)
 
 Thus, the RFC7344 requirements would need to ensure that adding the new DS record (via CDS/CDNSKEY plus bootstrap) only occurs after both DNS operator's zone instances contain both sets of ZSKs, and are signed with their respective KSKs.
 
