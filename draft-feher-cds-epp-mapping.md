@@ -63,9 +63,9 @@ There are currently two current or proposed methods for establishing initial tru
 Those are RFC8078, and draft-thomassen-dnsop-dnssec-bootstrapping.
 
 ## RFC8078
-RFC8078 proposes several models that a parent may use for managing initial trust. These models assume that it is the parent which will observe any CDS/CDNSKEY signals and it will also be the parent which manages the initial trust solution. 
+RFC8078 proposes several models that a parent may use for managing initial trust. These models assume that it is the parent which will observe any CDS/CDNSKEY signals and it will also be the parent which manages the initial trust solution.
 
-When a Registry does not support {{!RFC8078}} a Registrar can instead carry out the operations described in {{!RFC8078}} section 3. 
+When a Registry does not support {{!RFC8078}} a Registrar can instead carry out the operations described in {{!RFC8078}} section 3.
 
 ### Accept Policy via Authenticated Channel
 The Registrar can use an authenticated channel to receive a notice that a CDS/CDNSKEY exists. Once the notice is received, the process documented in {{!RFC8078}} section 3.1 should be followed.
@@ -84,7 +84,7 @@ TODO
 
 ### Draft-thomassen-dnsop-dnssec-bootstrapping
 
-[comment]: # (Depending on the progress of the bootstrap draft we might reduce this text to a short summary)
+[comment](# "Depending on the progress of the bootstrap draft we might reduce this text to a short summary")
 
 This draft supports the "bootstrap" method where a DNS operator, to whom the Registrant's domain is delegated, is able to publish the CDS/CDNSKEY records in the Registrant's domain (which will then become DNSSEC signed), and to also publish this initial CDS/CDNSKEY in a special zone operated by the DNS operator, specifically for the purpose of establishing this initial trust.
 
@@ -106,12 +106,12 @@ Once the initial trust exists, all the rest of RFC7344 can manage key rollovers 
 
 The interesting consequence of bootstrap is that a second DNS provider can be added at the Registrar (and submitted as an insecure delegation via EPP), and then the new DNS provider's bootstrap can be recognized to add a second secure delegation, to enable multi-signer DNSSEC.
 
-[comment]: # (I don't quite follow the comments regarding 'insecure delegation' and 'secure delegation' if a single DS is present its secure regardless of whether the second provider's DS is present yet or not.)
+[comment](# "I don't quite follow the comments regarding 'insecure delegation' and 'secure delegation' if a single DS is present its secure regardless of whether the second provider's DS is present yet or not.")
 
 
 Each DNS operator would have its own KSK, and would need to maintain the full set of ZSKs for both providers, in order for both providers' zone instances to pass the DNSSEC validation logic.
 
-[comment]: # (The domain owner can still generate the dnskey rrset on behalf of each operator, so 2x KSK isnt strictly required. although perhaps you wouldnt bother with this bootstrap method if you had that capability)
+[comment](# "The domain owner can still generate the dnskey rrset on behalf of each operator, so 2x KSK isnt strictly required. although perhaps you wouldnt bother with this bootstrap method if you had that capability")
 
 Thus, the RFC7344 requirements would need to ensure that adding the new DS record (via CDS/CDNSKEY plus bootstrap) only occurs after both DNS operator's zone instances contain both sets of ZSKs, and are signed with their respective KSKs.
 
