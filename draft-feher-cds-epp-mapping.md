@@ -59,8 +59,8 @@ Some Registries may use EPP as the method by which CDS signals are applied to th
 
 # Registrar Initial Trust Models
 
-There are currently two current or proposed methods for establishing initial trust, which do not require registrant use of a UI or API.
-Those are RFC8078, and draft-thomassen-dnsop-dnssec-bootstrapping.
+In addition to the proposed methods for establishing initial trust found in {{!RFC8078}}, an additional method {{!draft-thomassen-dnsop-dnssec-bootstrapping}}which does not require registrant interaction is also discussed here.
+
 
 ## RFC8078
 RFC8078 proposes several models that a parent may use for managing initial trust. These models assume that it is the parent which will observe any CDS/CDNSKEY signals and it will also be the parent which manages the initial trust solution.
@@ -126,7 +126,7 @@ If both CDS and CDNSKEY RRsets are present then a Registrar SHOULD choose the RR
 TODO EPP Examples
 
 ## Roll over the KSK
-TODO
+Regardless of the method used to accept the initial 
 
 ## Turn off DNSSEC validation
 TODO
