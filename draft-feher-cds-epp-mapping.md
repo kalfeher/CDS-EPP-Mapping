@@ -47,19 +47,19 @@ when, and only when, they appear in all capitals, as shown here.
 
 # Background
 
-{{!RFC7344}} specifies how DNS trust can be maintained across key rollovers in-band between parent and child. {{!RFC8078}} added inband signalling DNSSEC status changes and documented 3 use cases. This document describes how the parent zone changes required by those use cases might be implemented via EPP. This document seeks to map the three use cases found in {{!RFC8078}} section 2, to EPP operations.
+{{!RFC7344}} specifies how DNS trust can be maintained across key rollovers in-band between parent and child. {{!RFC8078}} added inband signalling DNSSEC status changes and documented 3 use cases. This document describes how the parent zone changes required by those use cases might be implemented on behalf of the Domain owner via EPP. This document seeks to map the three use cases found in {{!RFC8078}} section 2, to EPP operations.
 
 ## Registries and Registrars
 Support for CDS/CDNSKEY amongst Internet Registries is likely to remain inconsistent for some time. Therefore practices for updating the parent zone for a registered domain should allow for either the Registry or the sponsoring Registrar to observe a domain's CDS records and subsequent state changes. In most TLDs both the Registrar and Registry are capable of making the changes signaled by CDS records, to the parent zone.
 
 Some Registrars may support CDS even if the Registry does not.
 
-Some Registries may use EPP as the method by which CDS signals are applied to the registry system for subsequent entry into the registered domain's parent zone.
+Some Registries may use EPP as the method by which CDS signals are applied to the registry system for subsequent entry into the registered domain's parent zone. This document focuses on Registrars detecting and making the necessary changes to the parent zone, however a Registry may use these same techniques. 
 
 
 # Registrar Initial Trust Models
 
-In addition to the proposed methods for establishing initial trust found in {{!RFC8078}}, an additional method {{!draft-thomassen-dnsop-dnssec-bootstrapping}}which does not require registrant interaction is also discussed here.
+The initial trust models found in {{!RFC8078}} may be used by Registrars. Additional methods such as the technique described in {{!draft-thomassen-dnsop-dnssec-bootstrapping}} may also be used.
 
 
 ## RFC8078
@@ -83,37 +83,8 @@ TODO
 TODO
 
 ### Draft-thomassen-dnsop-dnssec-bootstrapping
+Registrars may periodically check to see if a nameserver to which a domain is delegated, contains the necessary contents to follow the process described in {{!draft-thomassen-dnsop-dnssec-bootstrapping}}.
 
-[comment](# "Depending on the progress of the bootstrap draft we might reduce this text to a short summary")
-
-This draft supports the "bootstrap" method where a DNS operator, to whom the Registrant's domain is delegated, is able to publish the CDS/CDNSKEY records in the Registrant's domain (which will then become DNSSEC signed), and to also publish this initial CDS/CDNSKEY in a special zone operated by the DNS operator, specifically for the purpose of establishing this initial trust.
-
-### Bootstrap Details
-
-The bootstrap zone is a child of the zone of the DNS operator's name servers. It is intended for use exclusively for bootstrapping any domain operated by the DNS operator.
-
-When the Registrant (who is a DNS customer of the operator) decides to enable DNSSEC, the DNS operator's sytems manage all the details. The KSK and ZSK are generated, the zone is signed (by the ZSK), the DNSKEY set is signed (by the KSK), and the CDS and/or CDNSKEY records are created. This is standard RFC7344 processing.
-
-The next step is what differentiates draft-thomassen-dnsop-dnssec-bootstrapping from RFC7344: new entries in the bootstrap zone are created, to associate the CDS and/or CDNSKEY records' RDATA with a hash of the zone name (needed for ensuring total FQDN length is not exceeded), and to map the hashed name back to the original zone name via PTR record.
-
-Since the DNS operator's bootstrap zone is DNSSEC signed, all of the records can be validated.
-Since the DNS delegation to the operator's name servers already exists, the trust relationship can be verified at the parent side.
-The remaining step is for the Registrar to poll the bootstrap zone periodically, validate the records (including the PTR which contains the domain name), and transform the bootstrap records into the corresponding EPP commands to add DNSSEC for the domain to the corresponding TLD.
-
-Once the initial trust exists, all the rest of RFC7344 can manage key rollovers and even, when appropriate, going insecure.
-
-### Bootstrapping Multi-Signer DNSSEC
-
-The interesting consequence of bootstrap is that a second DNS provider can be added at the Registrar (and submitted as an insecure delegation via EPP), and then the new DNS provider's bootstrap can be recognized to add a second secure delegation, to enable multi-signer DNSSEC.
-
-[comment](# "I don't quite follow the comments regarding 'insecure delegation' and 'secure delegation' if a single DS is present its secure regardless of whether the second provider's DS is present yet or not.")
-
-
-Each DNS operator would have its own KSK, and would need to maintain the full set of ZSKs for both providers, in order for both providers' zone instances to pass the DNSSEC validation logic.
-
-[comment](# "The domain owner can still generate the dnskey rrset on behalf of each operator, so 2x KSK isnt strictly required. although perhaps you wouldnt bother with this bootstrap method if you had that capability")
-
-Thus, the RFC7344 requirements would need to ensure that adding the new DS record (via CDS/CDNSKEY plus bootstrap) only occurs after both DNS operator's zone instances contain both sets of ZSKs, and are signed with their respective KSKs.
 
 # EPP Commands for CDS/CDNSKEY Use Cases
 
